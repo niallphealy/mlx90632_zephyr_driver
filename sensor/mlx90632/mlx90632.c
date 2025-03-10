@@ -25,6 +25,10 @@
  * @{
  *
  */
+
+ #define DT_DRV_COMPAT melexis_mlx90632
+
+ 
 #include <stdint.h>
 #include <math.h>
 #include <errno.h>
