@@ -41,6 +41,8 @@
 
 static const char mlx90632version[] __attribute__((used)) = { VERSION };
 
+static const struct device *temp_dev;
+
 #ifndef STATIC
 #define STATIC static
 #endif
@@ -783,27 +785,18 @@ int32_t mlx90632_get_channel_position(void)
     return (reg_status & MLX90632_STAT_CYCLE_POS) >> 2;
 }
 
-///@}
 int32_t mlx90632_i2c_read(int16_t register_address, uint16_t *value)
 {
     // printk("READING FROM MLX TEMP\n");
     uint8_t buffer[2]; // Buffer to store 2 bytes read from the I2C device
+    uint8_t i2c_write_buff[2];
     int32_t ret;
-    const struct device *i2c_drvr;
-	int i2c_index;
-
-    // Find i2c device in i2c_devices[]
-	i2c_index = i2c_devices_get_index(I2C_ADDR_TEMP);
-	i2c_drvr = i2c_devices[i2c_index].drvr_inst;
-
-    // Call the platform-specific i2c_read function
-    // ret = i2c_read(I2C_DEV_TYPE_MLX3_TEMP, buffer, 2, (uint16_t)register_address);
-    // ret = i2c_device_read(TEMP_SENSOR_ADDR, (uint16_t)(register_address), &value, 2);
+    
 	i2c_write_buff[0] = ( register_address >> 8 ) & 0xFF;
 	i2c_write_buff[1] = ( register_address & 0xFF);
-	k_sem_take(&i2c_bus_1, K_FOREVER);
-    ret = i2c_write_read(i2c_drvr, I2C_ADDR_TEMP, i2c_write_buff, 2, &buffer, 2);
-	k_sem_give(&i2c_bus_1);
+
+    ret = i2c_write_read_dt(&temp_dev->i2c, i2c_write_buff, 2, &buffer, 2);
+    
     if (ret < 0) {
         return ret; // Return error code if i2c_read fails
     }
@@ -819,21 +812,14 @@ int32_t mlx90632_i2c_read32(int16_t register_address, uint32_t *value)
 {
     // printk("READING FROM MLX TEMP\n");
     uint8_t buffer[4]; // Buffer to store 4 bytes read from the I2C device
+    uint8_t i2c_write_buff[2];
     int32_t ret;
-    const struct device *i2c_drvr;
-	int i2c_index;
 
-    // Find i2c device in i2c_devices[]
-	i2c_index = i2c_devices_get_index(I2C_ADDR_TEMP);
-	i2c_drvr = i2c_devices[i2c_index].drvr_inst;
 
-    // Call the platform-specific i2c_read function
-    // ret = i2c_read(I2C_DEV_TYPE_MLX3_TEMP, buffer, 2, (uint16_t)register_address);
-    // ret = i2c_device_read(TEMP_SENSOR_ADDR, (uint16_t)(register_address), &value, 2);
 	i2c_write_buff[0] = ( register_address >> 8 ) & 0xFF;
 	i2c_write_buff[1] = ( register_address & 0xFF);
 
-    ret = i2c_write_read(i2c_drvr, I2C_ADDR_TEMP, i2c_write_buff, 2, &buffer, 4);
+    ret = i2c_write_read_dt(&temp_dev->i2c, i2c_write_buff, 2, &buffer, 4);
     if (ret < 0) {
         return ret; // Return error code if i2c_read fails
     }
@@ -849,12 +835,7 @@ int32_t mlx90632_i2c_write(int16_t register_address, uint16_t value)
 {
 
     uint8_t data[4];
-	const struct device *i2c_drvr;
-	int i2c_index;
 	int ret;
-    // Find i2c device in i2c_devices[]
-	i2c_index = i2c_devices_get_index(I2C_ADDR_TEMP);
-	i2c_drvr = i2c_devices[i2c_index].drvr_inst;
 
 	data[0] = (uint8_t)(register_address >> 8);
 	data[1] = (uint8_t)(register_address & 0xFF);
@@ -863,7 +844,7 @@ int32_t mlx90632_i2c_write(int16_t register_address, uint16_t value)
     data[3] = (uint8_t)(value & 0xFF);
 
 
-    ret = i2c_write(i2c_drvr, data, 4, I2C_ADDR_TEMP);
+    ret = i2c_write_dt(&temp_dev->i2c, data, 4, );
 
 	return ret;
 }
@@ -883,6 +864,7 @@ void msleep(int msecs)
 void mlx90632_init(const struct device *dev)
 {
 	int32_t ret;
+    temp_dev = dev;
     const struct mlx90632_config *cal_data = dev->config;
 
 	ret = mlx90632_i2c_read32(MLX90632_EE_P_R, &cal_data->P_R);
@@ -920,18 +902,20 @@ void mlx90632_sample_fetch(const struct device *dev)
 void mlx90632_channel_get(const struct device *dev, enum sensor_channel chan, struct sensor_value *val)
 {
     double ambient, object;
+    struct mlx90632_data *data = dev->data;
+    const struct mlx90632_config *cal_data = dev->config;
 
-    ambient = mlx90632_calc_temp_ambient(ambient_new_raw, ambient_old_raw,
-        P_T, P_R, P_G, P_O, Gb);
+    ambient = mlx90632_calc_temp_ambient(data->ambient_new_raw, data->ambient_old_raw,
+        cal_data->P_T, cal_data->P_R, cal_data->P_G, cal_data->P_O, cal_data->Gb);
 
     /* Get preprocessed temperatures needed for object temperature calculation */
-    double pre_ambient = mlx90632_preprocess_temp_ambient(ambient_new_raw,
-                            ambient_old_raw, Gb);
-    double pre_object = mlx90632_preprocess_temp_object(object_new_raw, object_old_raw,
-                        ambient_new_raw, ambient_old_raw,
-                        Ka);
+    double pre_ambient = mlx90632_preprocess_temp_ambient(data->ambient_new_raw,
+        data->ambient_old_raw, cal_data->Gb);
+    double pre_object = mlx90632_preprocess_temp_object(data->object_new_raw, data->object_old_raw,
+        data->ambient_new_raw, data->ambient_old_raw,
+                        cal_data->Ka);
     /* Calculate object temperature */
-    object = mlx90632_calc_temp_object(pre_object, pre_ambient, Ea, Eb, Ga, Fa, Fb, Ha, Hb);
+    object = mlx90632_calc_temp_object(pre_object, pre_ambient, cal_data->Ea, cal_data->Eb, cal_data->Ga, cal_data->Fa, cal_data->Fb, cal_data->Ha, cal_data->Hb);
 
     val->val1 = (int) object
     val->val2 = (int) ((object - val->val1) * 100)
