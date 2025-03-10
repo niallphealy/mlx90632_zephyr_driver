@@ -892,7 +892,7 @@ void mlx90632_sample_fetch(const struct device *dev)
 {
     struct mlx90632_data *data = dev->data;
 
-    mlx90632_read_temp_raw(&data->ambient_new_raw, &data->ambient_old_raw,
+    mlx90632_read_temp_raw(dev, &data->ambient_new_raw, &data->ambient_old_raw,
                            &data->object_new_raw, &data->object_old_raw);
 }
 
@@ -923,6 +923,7 @@ void mlx90632_channel_get(const struct device *dev, enum sensor_channel chan, st
         val->val1 = (int) ambient;
         val->val2 = (int) ((ambient - val->val1) * 100);
     }
+    else {}
 }
 
 static const struct sensor_driver_api mlx90632_api = 
