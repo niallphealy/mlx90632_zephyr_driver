@@ -1,0 +1,8 @@
+# Configuration options
+
+config MLX90632
+	bool "MLX90632 Driver"
+	default y
+	select I2C
+	help
+	  Enable the driver for the Melexis MLX90632 infrared temperature sensor

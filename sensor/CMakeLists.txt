@@ -1,0 +1,1 @@
+add_subdirectory_ifdef(CONFIG_SENSOR_MLX90632 mlx90632)
