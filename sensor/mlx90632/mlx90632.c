@@ -934,7 +934,7 @@ void mlx90632_channel_get(const struct device *dev, enum sensor_channel chan, st
     object = mlx90632_calc_temp_object(pre_object, pre_ambient, Ea, Eb, Ga, Fa, Fb, Ha, Hb);
 
     val->val1 = (int) object
-    val->val2 = (int) (object - val->val1) * 100)
+    val->val2 = (int) ((object - val->val1) * 100)
 }
 
 static const struct sensor_driver_api mlx90632_api = 
