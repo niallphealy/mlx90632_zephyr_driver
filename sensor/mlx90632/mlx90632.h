@@ -281,7 +281,7 @@ struct mlx90632_config {
  *
  * @note This function is not blocking!
  */
-int32_t mlx90632_read_temp_raw_wo_wait(int32_t channel_position,
+int32_t mlx90632_read_temp_raw_wo_wait(const struct device *dev, int32_t channel_position,
                                        int16_t *ambient_new_raw, int16_t *ambient_old_raw,
                                        int16_t *object_new_raw, int16_t *object_old_raw);
 
@@ -301,7 +301,7 @@ int32_t mlx90632_read_temp_raw_wo_wait(int32_t channel_position,
  * @retval 0 Successfully read both temperatures
  * @retval <0 Something went wrong. Check errno.h for more details
  */
-int32_t mlx90632_read_temp_raw(int16_t *ambient_new_raw, int16_t *ambient_old_raw,
+int32_t mlx90632_read_temp_raw(const struct device *dev, int16_t *ambient_new_raw, int16_t *ambient_old_raw,
                                int16_t *object_new_raw, int16_t *object_old_raw);
 
 /** Read raw ambient and object temperature in sleeping step mode
@@ -320,7 +320,7 @@ int32_t mlx90632_read_temp_raw(int16_t *ambient_new_raw, int16_t *ambient_old_ra
  * @retval 0 Successfully read both temperatures
  * @retval <0 Something went wrong. Check errno.h for more details
  */
-int32_t mlx90632_read_temp_raw_burst(int16_t *ambient_new_raw, int16_t *ambient_old_raw,
+int32_t mlx90632_read_temp_raw_burst(const struct device *dev, int16_t *ambient_new_raw, int16_t *ambient_old_raw,
                                      int16_t *object_new_raw, int16_t *object_old_raw);
 
 /** Calculation of raw ambient output
@@ -441,7 +441,7 @@ double mlx90632_calc_temp_object_reflected(int32_t object, int32_t ambient, doub
  * @retval ERANGE Successfully initialized MLX90632 driver, extended range measurement is supported
  * @retval <0 Something went wrong. Consult errno.h for more details.
  */
-int32_t mlx90632_init(void);
+int32_t mlx90632_init(const struct device *dev);
 
 /** Trigger measurement for mlx90632
  *
@@ -452,7 +452,7 @@ int32_t mlx90632_init(void);
  *
  * @note This function is not blocking!
  */
-int32_t mlx90632_trigger_measurement(void);
+int32_t mlx90632_trigger_measurement(const struct device *dev);
 
 /** Wait for measurement to complete for mlx90632
  *
@@ -465,7 +465,7 @@ int32_t mlx90632_trigger_measurement(void);
  *
  * @note This function is using usleep so it is blocking!
  */
-int32_t mlx90632_wait_for_measurement(void);
+int32_t mlx90632_wait_for_measurement(const struct device *dev);
 
 /** Trigger start measurement for mlx90632
  *
@@ -476,7 +476,7 @@ int32_t mlx90632_wait_for_measurement(void);
  *
  * @note This function is using usleep so it is blocking!
  */
-int32_t mlx90632_start_measurement(void);
+int32_t mlx90632_start_measurement(const struct device *dev);
 
 /** Set emissivity which is retained in single variable.
  *
@@ -502,7 +502,7 @@ double mlx90632_get_emissivity(void);
  *
  * @note This function is not blocking!
  */
-int32_t mlx90632_trigger_measurement_burst(void);
+int32_t mlx90632_trigger_measurement_burst(const struct device *dev);
 
 /** Wait for burst measurement to complete for mlx90632
  *
@@ -515,7 +515,7 @@ int32_t mlx90632_trigger_measurement_burst(void);
  *
  * @note This function is using usleep so it is blocking!
  */
-int32_t mlx90632_wait_for_measurement_burst(void);
+int32_t mlx90632_wait_for_measurement_burst(const struct device *dev);
 
 /** Trigger start of burst measurement for mlx90632
  *
@@ -531,7 +531,7 @@ int32_t mlx90632_wait_for_measurement_burst(void);
  * In case both are blocking expect up to 2 second freeze of CPU in worse case scenario (depending on Refresh rate setting), so
  * you might also need to take care of Watch Dog.
  */
-int32_t mlx90632_start_measurement_burst(void);
+int32_t mlx90632_start_measurement_burst(const struct device *dev);
 
 /** Trigger single measurement for mlx90632
  *
@@ -545,7 +545,7 @@ int32_t mlx90632_start_measurement_burst(void);
  *
  * @note This function is not blocking!
  */
-int32_t mlx90632_trigger_measurement_single(void);
+int32_t mlx90632_trigger_measurement_single(const struct device *dev);
 
 /** Reads the refresh rate and calculates the time needed for a single measurment from the EEPROM settings.
  *
@@ -554,7 +554,7 @@ int32_t mlx90632_trigger_measurement_single(void);
  * @retval >=0 Refresh time in ms
  * @retval <0 Something went wrong. Check errno.h for more details.
  */
-int32_t mlx90632_get_measurement_time(uint16_t meas);
+int32_t mlx90632_get_measurement_time(const struct device *dev, uint16_t meas);
 
 /** Reads the refresh rate and calculates the time needed for a whole measurment table from the EEPROM settings.
  *
@@ -564,7 +564,7 @@ int32_t mlx90632_get_measurement_time(uint16_t meas);
  * @retval >=0 Refresh time in ms
  * @retval <0 Something went wrong. Check errno.h for more details.
  */
-int32_t mlx90632_calculate_dataset_ready_time(void);
+int32_t mlx90632_calculate_dataset_ready_time(const struct device *dev);
 
 /** Trigger system reset for mlx90632
  *
@@ -576,7 +576,7 @@ int32_t mlx90632_calculate_dataset_ready_time(void);
  *
  * @note This function is using usleep so it is blocking!
  */
-int32_t mlx90632_addressed_reset(void);
+int32_t mlx90632_addressed_reset(const struct device *dev);
 
 /** Sets the refresh rate of the sensor using the MLX90632_EE_MEAS_1 and MLX90632_EE_MEAS_2 registers
  *
@@ -584,21 +584,29 @@ int32_t mlx90632_addressed_reset(void);
  *
  * @retval <0 Something went wrong. Consult errno.h for more details.
  */
-int32_t mlx90632_set_refresh_rate(mlx90632_meas_t measRate);
+int32_t mlx90632_set_refresh_rate(const struct device *dev, mlx90632_meas_t measRate);
 
 /** Gets the value in MLX90632_EE_MEAS_1 and converts it to the appropriate MLX90632_MEAS enum
  *
  * @retval MLX90632_MEAS_HZ_ERROR if there is an error
  * @retval refresh_rate as the #mlx90632_meas_e
  */
-mlx90632_meas_t mlx90632_get_refresh_rate(void);
+mlx90632_meas_t mlx90632_get_refresh_rate(const struct device *dev);
 
 /** Gets the channel position where new (recently updated) measurement can be found
  *
  * @retval <0 Something failed. Check errno.h for more information
  * @retval >=0 Channel position where new (recently updated) measurement can be found
  */
-int32_t mlx90632_get_channel_position(void);
+int32_t mlx90632_get_channel_position(const struct device *dev);
+
+int32_t mlx90632_i2c_read(int16_t register_address, uint16_t *value);
+int32_t mlx90632_i2c_read32(int16_t register_address, uint32_t *value);
+int32_t mlx90632_i2c_write(int16_t register_address, uint16_t value);
+void usleep(int min_range, int max_range);
+void msleep(int msecs);
+void mlx90632_init(const struct device *dev);
+
 
 ///@}
 
