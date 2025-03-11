@@ -861,7 +861,6 @@ void msleep(int msecs)
 void mlx90632_init(const struct device *dev)
 {
 	int32_t ret;
-    temp_dev = dev;
     struct mlx90632_config *cal_data = dev->config;
 
 	ret = mlx90632_i2c_read32(dev, MLX90632_EE_P_R, &cal_data->P_R);

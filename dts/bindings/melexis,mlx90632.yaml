@@ -1,6 +1,3 @@
-# ProtoCentral Electronics (info@protocentral.com)
-# SPDX-License-Identifier: Apache-2.0
-
 description: MLX90632 infrared temperature sensor
 
 compatible: "melexis,mlx90632"
