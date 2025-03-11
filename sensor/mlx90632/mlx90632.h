@@ -605,7 +605,6 @@ int32_t mlx90632_i2c_read32(const struct device *dev, int16_t register_address, 
 int32_t mlx90632_i2c_write(const struct device *dev, int16_t register_address, uint16_t value);
 void usleep(int min_range, int max_range);
 void msleep(int msecs);
-void mlx90632_driver_init(const struct device *dev);
 
 
 ///@}
