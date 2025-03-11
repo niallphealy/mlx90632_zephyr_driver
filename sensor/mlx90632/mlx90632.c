@@ -718,7 +718,7 @@ STATIC int32_t mlx90632_erase_eeprom(const struct device *dev, uint16_t address)
 
 STATIC int32_t mlx90632_write_eeprom(const struct device *dev, uint16_t address, uint16_t data)
 {
-    int32_t ret = mlx90632_erase_eeprom(address);
+    int32_t ret = mlx90632_erase_eeprom(dev, address);
 
     if (ret < 0)
         return ret;
@@ -862,7 +862,7 @@ void msleep(int msecs)
     return;
 }
 
-static void mlx90632_init(const struct device *dev)
+static void mlx90632_driver_init(const struct device *dev)
 {
 	// int32_t ret;
     // struct mlx90632_config *cal_data = dev->config;
@@ -942,7 +942,7 @@ static const struct sensor_driver_api mlx90632_api =
 		.i2c = I2C_DT_SPEC_INST_GET(inst),                          		\
 	};  																	\
 	DEVICE_DT_INST_DEFINE(inst,												\
-                mlx90632_init,												\
+                mlx90632_driver_init,												\
 				NULL,														\
 				&mlx90632_data##inst,										\
 				&mlx90632_config##inst,										\

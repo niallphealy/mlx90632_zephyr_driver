@@ -600,12 +600,12 @@ mlx90632_meas_t mlx90632_get_refresh_rate(const struct device *dev);
  */
 int32_t mlx90632_get_channel_position(const struct device *dev);
 
-int32_t mlx90632_i2c_read(int16_t register_address, uint16_t *value);
-int32_t mlx90632_i2c_read32(int16_t register_address, uint32_t *value);
-int32_t mlx90632_i2c_write(int16_t register_address, uint16_t value);
+int32_t mlx90632_i2c_read(const struct device *dev, int16_t register_address, uint16_t *value);
+int32_t mlx90632_i2c_read32(const struct device *dev, int16_t register_address, uint32_t *value);
+int32_t mlx90632_i2c_write(const struct device *dev, int16_t register_address, uint16_t value);
 void usleep(int min_range, int max_range);
 void msleep(int msecs);
-void mlx90632_init(const struct device *dev);
+void mlx90632_driver_init(const struct device *dev);
 
 
 ///@}
