@@ -864,69 +864,69 @@ void msleep(int msecs)
 
 static void mlx90632_driver_init(const struct device *dev)
 {
-	// int32_t ret;
-    // struct mlx90632_config *cal_data = dev->config;
+	int32_t ret;
+    struct mlx90632_config *cal_data = dev->config;
 
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_P_R, &cal_data->P_R);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_P_G, &cal_data->P_G);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_P_T, &cal_data->P_T);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_P_O, &cal_data->P_O);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_Aa, &cal_data->Aa);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ab, &cal_data->Ab);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ba, &cal_data->Ba);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_Bb, &cal_data->Bb);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ca, &cal_data->Ca);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_Cb, &cal_data->Cb);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_Da, &cal_data->Da);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_Db, &cal_data->Db);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ea, &cal_data->Ea);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_Eb, &cal_data->Eb);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_Fa, &cal_data->Fa);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_Fb, &cal_data->Fb);
-	// ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ga, &cal_data->Ga);
-	// ret = mlx90632_i2c_read(dev, MLX90632_EE_Gb, &cal_data->Gb); 
-	// ret = mlx90632_i2c_read(dev, MLX90632_EE_Ka, &cal_data->Ka);
-	// ret = mlx90632_i2c_read(dev, MLX90632_EE_Ha, &cal_data->Ha);
-	// ret = mlx90632_i2c_read(dev, MLX90632_EE_Hb, &cal_data->Hb);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_P_R, &cal_data->P_R);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_P_G, &cal_data->P_G);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_P_T, &cal_data->P_T);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_P_O, &cal_data->P_O);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Aa, &cal_data->Aa);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ab, &cal_data->Ab);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ba, &cal_data->Ba);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Bb, &cal_data->Bb);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ca, &cal_data->Ca);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Cb, &cal_data->Cb);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Da, &cal_data->Da);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Db, &cal_data->Db);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ea, &cal_data->Ea);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Eb, &cal_data->Eb);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Fa, &cal_data->Fa);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Fb, &cal_data->Fb);
+	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ga, &cal_data->Ga);
+	ret = mlx90632_i2c_read(dev, MLX90632_EE_Gb, &cal_data->Gb); 
+	ret = mlx90632_i2c_read(dev, MLX90632_EE_Ka, &cal_data->Ka);
+	ret = mlx90632_i2c_read(dev, MLX90632_EE_Ha, &cal_data->Ha);
+	ret = mlx90632_i2c_read(dev, MLX90632_EE_Hb, &cal_data->Hb);
 }
 
 
 static void mlx90632_sample_fetch(const struct device *dev)
 {
-    // struct mlx90632_data *data = dev->data;
+    struct mlx90632_data *data = dev->data;
 
-    // mlx90632_read_temp_raw(dev, &data->ambient_new_raw, &data->ambient_old_raw,
-    //                        &data->object_new_raw, &data->object_old_raw);
+    mlx90632_read_temp_raw(dev, &data->ambient_new_raw, &data->ambient_old_raw,
+                           &data->object_new_raw, &data->object_old_raw);
 }
 
 static void mlx90632_channel_get(const struct device *dev, enum sensor_channel chan, struct sensor_value *val)
 {
-    // double ambient, object;
-    // struct mlx90632_data *data = dev->data;
-    // const struct mlx90632_config *cal_data = dev->config;
+    double ambient, object;
+    struct mlx90632_data *data = dev->data;
+    const struct mlx90632_config *cal_data = dev->config;
 
-    // ambient = mlx90632_calc_temp_ambient(data->ambient_new_raw, data->ambient_old_raw,
-    //     cal_data->P_T, cal_data->P_R, cal_data->P_G, cal_data->P_O, cal_data->Gb);
+    ambient = mlx90632_calc_temp_ambient(data->ambient_new_raw, data->ambient_old_raw,
+        cal_data->P_T, cal_data->P_R, cal_data->P_G, cal_data->P_O, cal_data->Gb);
 
-    // /* Get preprocessed temperatures needed for object temperature calculation */
-    // double pre_ambient = mlx90632_preprocess_temp_ambient(data->ambient_new_raw,
-    //     data->ambient_old_raw, cal_data->Gb);
-    // double pre_object = mlx90632_preprocess_temp_object(data->object_new_raw, data->object_old_raw,
-    //     data->ambient_new_raw, data->ambient_old_raw,
-    //                     cal_data->Ka);
-    // /* Calculate object temperature */
-    // object = mlx90632_calc_temp_object(pre_object, pre_ambient, cal_data->Ea, cal_data->Eb, cal_data->Ga, cal_data->Fa, cal_data->Fb, cal_data->Ha, cal_data->Hb);
+    /* Get preprocessed temperatures needed for object temperature calculation */
+    double pre_ambient = mlx90632_preprocess_temp_ambient(data->ambient_new_raw,
+        data->ambient_old_raw, cal_data->Gb);
+    double pre_object = mlx90632_preprocess_temp_object(data->object_new_raw, data->object_old_raw,
+        data->ambient_new_raw, data->ambient_old_raw,
+                        cal_data->Ka);
+    /* Calculate object temperature */
+    object = mlx90632_calc_temp_object(pre_object, pre_ambient, cal_data->Ea, cal_data->Eb, cal_data->Ga, cal_data->Fa, cal_data->Fb, cal_data->Ha, cal_data->Hb);
     
-    // if(chan == 0)
-    // {
-    //     val->val1 = (int) object;
-    //     val->val2 = (int) ((object - val->val1) * 100);
-    // }
-    // else if (chan == 1) {
-    //     val->val1 = (int) ambient;
-    //     val->val2 = (int) ((ambient - val->val1) * 100);
-    // }
-    // else {}
+    if(chan == 0)
+    {
+        val->val1 = (int) object;
+        val->val2 = (int) ((object - val->val1) * 100);
+    }
+    else if (chan == 1) {
+        val->val1 = (int) ambient;
+        val->val2 = (int) ((ambient - val->val1) * 100);
+    }
+    else {}
 }
 
 static const struct sensor_driver_api mlx90632_api = 
