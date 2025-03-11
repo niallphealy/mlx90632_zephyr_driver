@@ -209,7 +209,7 @@ struct mlx90632_data {
 };
 
 struct mlx90632_config {
-    struct i2c_dt_spec;
+    struct i2c_dt_spec i2c;
     uint32_t P_R;
     uint32_t P_G;
     uint32_t P_T;
