@@ -206,7 +206,7 @@ struct mlx90632_data {
     int16_t ambient_old_raw;
     int16_t object_new_raw;
     int16_t object_old_raw;
-} 
+};
 
 struct mlx90632_config {
     struct i2c_dt_spec;
@@ -231,7 +231,7 @@ struct mlx90632_config {
     uint16_t Ka;
     uint16_t Ha;
     uint16_t Hb;
-}
+};
 
 
 
