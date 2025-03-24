@@ -796,11 +796,13 @@ int32_t mlx90632_i2c_read(const struct device *dev, int16_t register_address, ui
     uint8_t buffer[2]; // Buffer to store 2 bytes read from the I2C device
     uint8_t i2c_write_buff[2];
     int32_t ret;
-    
+    const struct mlx90632_config *cfg = dev->config;
+
+
 	i2c_write_buff[0] = ( register_address >> 8 ) & 0xFF;
 	i2c_write_buff[1] = ( register_address & 0xFF);
 
-    ret = i2c_write_read_dt(&temp_dev->i2c, i2c_write_buff, 2, &buffer, 2);
+    ret = i2c_write_read_dt(&cfg->i2c, i2c_write_buff, 2, &buffer, 2);
     
     if (ret < 0) {
         return ret; // Return error code if i2c_read fails
@@ -818,11 +820,13 @@ int32_t mlx90632_i2c_read32(const struct device *dev, int16_t register_address, 
     uint8_t i2c_write_buff[2];
     int32_t ret;
 
+    const struct mlx90632_config *cfg = dev->config;
+
 
 	i2c_write_buff[0] = ( register_address >> 8 ) & 0xFF;
 	i2c_write_buff[1] = ( register_address & 0xFF);
 
-    ret = i2c_write_read_dt(&temp_dev->i2c, i2c_write_buff, 2, &buffer, 4);
+    ret = i2c_write_read_dt(&cfg->i2c, i2c_write_buff, 2, &buffer, 4);
     if (ret < 0) {
         return ret; // Return error code if i2c_read fails
     }
@@ -837,6 +841,7 @@ int32_t mlx90632_i2c_write(const struct device *dev, int16_t register_address, u
 
     uint8_t data[4];
 	int ret;
+    const struct mlx90632_config *cfg = dev->config;
 
 	data[0] = (uint8_t)(register_address >> 8);
 	data[1] = (uint8_t)(register_address & 0xFF);
@@ -845,7 +850,7 @@ int32_t mlx90632_i2c_write(const struct device *dev, int16_t register_address, u
     data[3] = (uint8_t)(value & 0xFF);
 
 
-    ret = i2c_write_dt(&temp_dev->i2c, data, 4, );
+    ret = i2c_write_dt(&cfg->i2c, data, 4);
 
 	return ret;
 }
