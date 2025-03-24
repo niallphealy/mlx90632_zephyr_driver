@@ -792,62 +792,62 @@ int32_t mlx90632_get_channel_position(const struct device *dev)
 
 int32_t mlx90632_i2c_read(const struct device *dev, int16_t register_address, uint16_t *value)
 {
-    // printk("READING FROM MLX TEMP\n");
-    // uint8_t buffer[2]; // Buffer to store 2 bytes read from the I2C device
-    // uint8_t i2c_write_buff[2];
-    // int32_t ret;
+    printk("READING FROM MLX TEMP\n");
+    uint8_t buffer[2]; // Buffer to store 2 bytes read from the I2C device
+    uint8_t i2c_write_buff[2];
+    int32_t ret;
     
-	// i2c_write_buff[0] = ( register_address >> 8 ) & 0xFF;
-	// i2c_write_buff[1] = ( register_address & 0xFF);
+	i2c_write_buff[0] = ( register_address >> 8 ) & 0xFF;
+	i2c_write_buff[1] = ( register_address & 0xFF);
 
-    // ret = i2c_write_read_dt(&temp_dev->i2c, i2c_write_buff, 2, &buffer, 2);
+    ret = i2c_write_read_dt(&temp_dev->i2c, i2c_write_buff, 2, &buffer, 2);
     
-    // if (ret < 0) {
-    //     return ret; // Return error code if i2c_read fails
-    // }
+    if (ret < 0) {
+        return ret; // Return error code if i2c_read fails
+    }
 
-    // // Combine the two bytes into a 16-bit value (assuming big-endian order from the device)
-    // *value = ((uint16_t)buffer[0] << 8) | buffer[1];
+    // Combine the two bytes into a 16-bit value (assuming big-endian order from the device)
+    *value = ((uint16_t)buffer[0] << 8) | buffer[1];
 
     return 0; // Success
 }
 int32_t mlx90632_i2c_read32(const struct device *dev, int16_t register_address, uint32_t *value)
 {
-    // printk("READING FROM MLX TEMP\n");
-    // uint8_t buffer[4]; // Buffer to store 4 bytes read from the I2C device
-    // uint8_t i2c_write_buff[2];
-    // int32_t ret;
+    printk("READING FROM MLX TEMP\n");
+    uint8_t buffer[4]; // Buffer to store 4 bytes read from the I2C device
+    uint8_t i2c_write_buff[2];
+    int32_t ret;
 
 
-	// i2c_write_buff[0] = ( register_address >> 8 ) & 0xFF;
-	// i2c_write_buff[1] = ( register_address & 0xFF);
+	i2c_write_buff[0] = ( register_address >> 8 ) & 0xFF;
+	i2c_write_buff[1] = ( register_address & 0xFF);
 
-    // ret = i2c_write_read_dt(&temp_dev->i2c, i2c_write_buff, 2, &buffer, 4);
-    // if (ret < 0) {
-    //     return ret; // Return error code if i2c_read fails
-    // }
+    ret = i2c_write_read_dt(&temp_dev->i2c, i2c_write_buff, 2, &buffer, 4);
+    if (ret < 0) {
+        return ret; // Return error code if i2c_read fails
+    }
 
-    // // Combine the four bytes into a 32-bit value (assuming big-endian order from the device)
-    // *value = ((uint32_t)buffer[2] << 24) | ((uint32_t)buffer[3] << 16) | ((uint32_t)buffer[0] << 8) | (uint32_t)buffer[1];
+    // Combine the four bytes into a 32-bit value (assuming big-endian order from the device)
+    *value = ((uint32_t)buffer[2] << 24) | ((uint32_t)buffer[3] << 16) | ((uint32_t)buffer[0] << 8) | (uint32_t)buffer[1];
 
-    // return 0; // Success
+    return 0; // Success
 }
 int32_t mlx90632_i2c_write(const struct device *dev, int16_t register_address, uint16_t value)
 {
 
-    // uint8_t data[4];
-	// int ret;
+    uint8_t data[4];
+	int ret;
 
-	// data[0] = (uint8_t)(register_address >> 8);
-	// data[1] = (uint8_t)(register_address & 0xFF);
+	data[0] = (uint8_t)(register_address >> 8);
+	data[1] = (uint8_t)(register_address & 0xFF);
 
-	// data[2] = (uint8_t)(value >> 8);
-    // data[3] = (uint8_t)(value & 0xFF);
+	data[2] = (uint8_t)(value >> 8);
+    data[3] = (uint8_t)(value & 0xFF);
 
 
-    // ret = i2c_write_dt(&temp_dev->i2c, data, 4, );
+    ret = i2c_write_dt(&temp_dev->i2c, data, 4, );
 
-	// return ret;
+	return ret;
 }
 
 void usleep(int min_range, int max_range)
@@ -931,8 +931,8 @@ static void mlx90632_channel_get(const struct device *dev, enum sensor_channel c
 
 static const struct sensor_driver_api mlx90632_api = 
 {
-    .sample_fetch = &mlx90632_sample_fetch,
-    .channel_get = &mlx90632_channel_get,
+    .sample_fetch = mlx90632_sample_fetch,
+    .channel_get = mlx90632_channel_get,
 };
 
 #define MLX90632_DEFINE(inst)												\
