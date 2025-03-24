@@ -871,28 +871,37 @@ static void mlx90632_driver_init(const struct device *dev)
 {
 	int32_t ret;
     struct mlx90632_config *cal_data = dev->config;
+    uint8_t write_buff[2];
+    uint8_t read_buf[76];
 
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_P_R, &cal_data->P_R);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_P_G, &cal_data->P_G);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_P_T, &cal_data->P_T);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_P_O, &cal_data->P_O);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Aa, &cal_data->Aa);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ab, &cal_data->Ab);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ba, &cal_data->Ba);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Bb, &cal_data->Bb);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ca, &cal_data->Ca);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Cb, &cal_data->Cb);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Da, &cal_data->Da);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Db, &cal_data->Db);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ea, &cal_data->Ea);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Eb, &cal_data->Eb);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Fa, &cal_data->Fa);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Fb, &cal_data->Fb);
-	ret = mlx90632_i2c_read32(dev, MLX90632_EE_Ga, &cal_data->Ga);
-	ret = mlx90632_i2c_read(dev, MLX90632_EE_Gb, &cal_data->Gb); 
-	ret = mlx90632_i2c_read(dev, MLX90632_EE_Ka, &cal_data->Ka);
-	ret = mlx90632_i2c_read(dev, MLX90632_EE_Ha, &cal_data->Ha);
-	ret = mlx90632_i2c_read(dev, MLX90632_EE_Hb, &cal_data->Hb);
+    write_buff[0] = (uint8_t)( MLX90632_EE_P_R >> 8 );
+    write_buff[1] = (uint8_t)(MLX90632_EE_P_R & 0x00FF );
+
+    // convert to one larger read
+    ret = i2c_write_read_dt(&cal_data->i2c, write_buff, 2, read_buf, 76);
+
+    cal_data->P_R = (uint32_t)( read_buf[0] << 24 ) | (uint32_t)( read_buf[1] << 16 ) | (uint32_t)( read_buf[2] << 8 ) | (uint32_t)(read_buf[3]);
+    cal_data->P_G = (uint32_t)( read_buf[4] << 24 ) | (uint32_t)( read_buf[5] << 16 ) | (uint32_t)( read_buf[6] << 8 ) | (uint32_t)(read_buf[7]);
+    cal_data->P_T = (uint32_t)( read_buf[8] << 24 ) | (uint32_t)( read_buf[9] << 16 ) | (uint32_t)( read_buf[10] << 8 ) | (uint32_t)(read_buf[11]);
+    cal_data->P_O = (uint32_t)( read_buf[12] << 24 ) | (uint32_t)( read_buf[13] << 16 ) | (uint32_t)( read_buf[14] << 8 ) | (uint32_t)(read_buf[15]);
+    cal_data->Aa = (uint32_t)( read_buf[16] << 24 ) | (uint32_t)( read_buf[17] << 16 ) | (uint32_t)( read_buf[18] << 8 ) | (uint32_t)(read_buf[19]);
+    cal_data->Ab = (uint32_t)( read_buf[20] << 24 ) | (uint32_t)( read_buf[21] << 16 ) | (uint32_t)( read_buf[22] << 8 ) | (uint32_t)(read_buf[23]);
+    cal_data->Ba = (uint32_t)( read_buf[24] << 24 ) | (uint32_t)( read_buf[25] << 16 ) | (uint32_t)( read_buf[26] << 8 ) | (uint32_t)(read_buf[27]);
+    cal_data->Bb = (uint32_t)( read_buf[28] << 24 ) | (uint32_t)( read_buf[29] << 16 ) | (uint32_t)( read_buf[30] << 8 ) | (uint32_t)(read_buf[31]);
+    cal_data->Ca = (uint32_t)( read_buf[32] << 24 ) | (uint32_t)( read_buf[33] << 16 ) | (uint32_t)( read_buf[34] << 8 ) | (uint32_t)(read_buf[35]);
+    cal_data->Cb = (uint32_t)( read_buf[36] << 24 ) | (uint32_t)( read_buf[37] << 16 ) | (uint32_t)( read_buf[38] << 8 ) | (uint32_t)(read_buf[39]);
+    cal_data->Da = (uint32_t)( read_buf[40] << 24 ) | (uint32_t)( read_buf[41] << 16 ) | (uint32_t)( read_buf[42] << 8 ) | (uint32_t)(read_buf[43]);
+    cal_data->Db = (uint32_t)( read_buf[44] << 24 ) | (uint32_t)( read_buf[45] << 16 ) | (uint32_t)( read_buf[46] << 8 ) | (uint32_t)(read_buf[47]);
+    cal_data->Ea = (uint32_t)( read_buf[48] << 24 ) | (uint32_t)( read_buf[49] << 16 ) | (uint32_t)( read_buf[50] << 8 ) | (uint32_t)(read_buf[51]);
+    cal_data->Eb = (uint32_t)( read_buf[52] << 24 ) | (uint32_t)( read_buf[53] << 16 ) | (uint32_t)( read_buf[54] << 8 ) | (uint32_t)(read_buf[55]);
+    cal_data->Fa = (uint32_t)( read_buf[56] << 24 ) | (uint32_t)( read_buf[57] << 16 ) | (uint32_t)( read_buf[58] << 8 ) | (uint32_t)(read_buf[59]);
+    cal_data->Fb = (uint32_t)( read_buf[60] << 24 ) | (uint32_t)( read_buf[61] << 16 ) | (uint32_t)( read_buf[62] << 8 ) | (uint32_t)(read_buf[63]);
+    cal_data->Ga = (uint32_t)( read_buf[64] << 24 ) | (uint32_t)( read_buf[65] << 16 ) | (uint32_t)( read_buf[66] << 8 ) | (uint32_t)(read_buf[67]);
+    cal_data->Gb = (uint16_t)( read_buf[68] << 8) | (uint16_t)(read_buf[69]);
+    cal_data->Ka = (uint16_t)( read_buf[70] << 8) | (uint16_t)(read_buf[71]);
+    cal_data->Ha = (uint16_t)( read_buf[72] << 8) | (uint16_t)(read_buf[73]);
+    cal_data->Hb = (uint16_t)( read_buf[74] << 8) | (uint16_t)(read_buf[75]);
+    return ret;
 }
 
 
