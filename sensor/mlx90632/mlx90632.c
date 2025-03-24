@@ -869,6 +869,7 @@ void msleep(int msecs)
 
 static void mlx90632_driver_init(const struct device *dev)
 {
+    printk("STARTING MLX INIT\n");
 	int32_t ret;
     struct mlx90632_config *cal_data = dev->config;
     uint8_t write_buff[2];
@@ -901,6 +902,7 @@ static void mlx90632_driver_init(const struct device *dev)
     cal_data->Ka = (uint16_t)( read_buf[70] << 8) | (uint16_t)(read_buf[71]);
     cal_data->Ha = (uint16_t)( read_buf[72] << 8) | (uint16_t)(read_buf[73]);
     cal_data->Hb = (uint16_t)( read_buf[74] << 8) | (uint16_t)(read_buf[75]);
+    printk("FINISHED MLX INIT\n");
     return ret;
 }
 
