@@ -871,7 +871,7 @@ static void mlx90632_driver_init(const struct device *dev)
 {
     printk("STARTING MLX INIT\n");
 	int32_t ret;
-    struct mlx90632_config *cal_data = dev->config;
+    struct mlx90632_config *cal_data = dev->data;
     uint8_t write_buff[2];
     uint8_t read_buf[76];
 
