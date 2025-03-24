@@ -37,6 +37,8 @@
 #ifndef _MLX90632_LIB_
 #define _MLX90632_LIB_
 
+#include <zephyr/drivers/i2c.h>
+
 /* Including CRC calculation functions */
 #include <errno.h>
 
