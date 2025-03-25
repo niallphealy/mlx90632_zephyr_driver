@@ -1,39 +1,3 @@
-/**
- * @file mlx90632.h
- * @brief MLX90632 driver with virtual i2c communication
- * @internal
- *
- * @copyright (C) 2017 Melexis N.V.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * @endinternal
- *
- * @addtogroup mlx90632_API MLX90632 Driver Library API
- * Implementation of MLX90632 driver with virtual i2c read/write functions
- *
- * @details
- * Copy of Kernel driver, except that it is stripped of Linux kernel specifics
- * which are replaced by simple i2c read/write functions. There are some Linux
- * kernel macros left behind as they make code more readable and easier to
- * understand, but if you already have your own implementation then preprocessor
- * should handle it just fine.
- *
- * Repository contains README.md for compilation and unit-test instructions.
- *
- * @{
- *
- */
 #ifndef _MLX90632_LIB_
 #define _MLX90632_LIB_
 
