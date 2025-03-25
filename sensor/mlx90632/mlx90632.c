@@ -869,9 +869,10 @@ void msleep(int msecs)
 
 static void mlx90632_driver_init(const struct device *dev)
 {
-    printk("STARTING MLX INIT\n");
+
 	int32_t ret;
-    struct mlx90632_config *cal_data = dev->data;
+    struct mlx90632_data *cal_data = dev->data;
+    const struct mlx90632_config *cfg = dev->config;
     uint8_t write_buff[2];
     uint8_t read_buf[76];
 
@@ -879,7 +880,7 @@ static void mlx90632_driver_init(const struct device *dev)
     write_buff[1] = (uint8_t)(MLX90632_EE_P_R & 0x00FF );
 
     // convert to one larger read
-    ret = i2c_write_read_dt(&cal_data->i2c, write_buff, 2, read_buf, 76);
+    ret = i2c_write_read_dt(&cfg->i2c, write_buff, 2, read_buf, 76);
 
     cal_data->P_R = (uint32_t)( read_buf[0] << 24 ) | (uint32_t)( read_buf[1] << 16 ) | (uint32_t)( read_buf[2] << 8 ) | (uint32_t)(read_buf[3]);
     cal_data->P_G = (uint32_t)( read_buf[4] << 24 ) | (uint32_t)( read_buf[5] << 16 ) | (uint32_t)( read_buf[6] << 8 ) | (uint32_t)(read_buf[7]);
@@ -902,7 +903,7 @@ static void mlx90632_driver_init(const struct device *dev)
     cal_data->Ka = (uint16_t)( read_buf[70] << 8) | (uint16_t)(read_buf[71]);
     cal_data->Ha = (uint16_t)( read_buf[72] << 8) | (uint16_t)(read_buf[73]);
     cal_data->Hb = (uint16_t)( read_buf[74] << 8) | (uint16_t)(read_buf[75]);
-    printk("FINISHED MLX INIT\n");
+
     return ret;
 }
 
