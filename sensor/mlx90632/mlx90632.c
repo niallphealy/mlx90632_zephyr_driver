@@ -920,19 +920,18 @@ static void mlx90632_channel_get(const struct device *dev, enum sensor_channel c
 {
     double ambient, object;
     struct mlx90632_data *data = dev->data;
-    const struct mlx90632_config *cal_data = dev->config;
 
     ambient = mlx90632_calc_temp_ambient(data->ambient_new_raw, data->ambient_old_raw,
-        cal_data->P_T, cal_data->P_R, cal_data->P_G, cal_data->P_O, cal_data->Gb);
+        data->P_T, data->P_R, data->P_G, data->P_O, data->Gb);
 
     /* Get preprocessed temperatures needed for object temperature calculation */
     double pre_ambient = mlx90632_preprocess_temp_ambient(data->ambient_new_raw,
-        data->ambient_old_raw, cal_data->Gb);
+        data->ambient_old_raw, data->Gb);
     double pre_object = mlx90632_preprocess_temp_object(data->object_new_raw, data->object_old_raw,
         data->ambient_new_raw, data->ambient_old_raw,
-                        cal_data->Ka);
+        data->Ka);
     /* Calculate object temperature */
-    object = mlx90632_calc_temp_object(pre_object, pre_ambient, cal_data->Ea, cal_data->Eb, cal_data->Ga, cal_data->Fa, cal_data->Fb, cal_data->Ha, cal_data->Hb);
+    object = mlx90632_calc_temp_object(pre_object, pre_ambient, data->Ea, data->Eb, data->Ga, data->Fa, data->Fb, data->Ha, data->Hb);
     
     if(chan == 0)
     {
