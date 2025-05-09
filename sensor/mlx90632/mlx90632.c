@@ -856,7 +856,7 @@ static int mlx90632_driver_init(const struct device *dev)
 	}
         // convert to one larger read
     ret = i2c_write_read_dt(&cfg->i2c, write_buff, 2, read_buf, 76);
-
+    k_sleep(K_MSEC(10));
     cal_data->P_R = (uint32_t)( read_buf[0] << 24 ) | (uint32_t)( read_buf[1] << 16 ) | (uint32_t)( read_buf[2] << 8 ) | (uint32_t)(read_buf[3]);
     cal_data->P_G = (uint32_t)( read_buf[4] << 24 ) | (uint32_t)( read_buf[5] << 16 ) | (uint32_t)( read_buf[6] << 8 ) | (uint32_t)(read_buf[7]);
     cal_data->P_T = (uint32_t)( read_buf[8] << 24 ) | (uint32_t)( read_buf[9] << 16 ) | (uint32_t)( read_buf[10] << 8 ) | (uint32_t)(read_buf[11]);
