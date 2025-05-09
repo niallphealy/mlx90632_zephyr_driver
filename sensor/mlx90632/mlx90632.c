@@ -849,7 +849,7 @@ static int mlx90632_driver_init(const struct device *dev)
 
     write_buff[0] = (uint8_t)( MLX90632_EE_P_R >> 8 );
     write_buff[1] = (uint8_t)(MLX90632_EE_P_R & 0x00FF );
-    if(!i2c_is_ready(&cfg->i2c))
+    if(!i2c_is_ready_dt(&cfg->i2c))
 	{
 		printk("I2C device not ready\n");
 		return -1;
