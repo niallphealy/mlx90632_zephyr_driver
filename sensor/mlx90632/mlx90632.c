@@ -849,8 +849,12 @@ static int mlx90632_driver_init(const struct device *dev)
 
     write_buff[0] = (uint8_t)( MLX90632_EE_P_R >> 8 );
     write_buff[1] = (uint8_t)(MLX90632_EE_P_R & 0x00FF );
-
-    // convert to one larger read
+    if(!i2c_is_ready(&cfg->i2c))
+	{
+		printk("I2C device not ready\n");
+		return -1;
+	}
+        // convert to one larger read
     ret = i2c_write_read_dt(&cfg->i2c, write_buff, 2, read_buf, 76);
 
     cal_data->P_R = (uint32_t)( read_buf[0] << 24 ) | (uint32_t)( read_buf[1] << 16 ) | (uint32_t)( read_buf[2] << 8 ) | (uint32_t)(read_buf[3]);
