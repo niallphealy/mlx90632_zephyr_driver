@@ -838,7 +838,7 @@ void msleep(int msecs)
     return;
 }
 
-static void mlx90632_driver_init(const struct device *dev)
+static int mlx90632_driver_init(const struct device *dev)
 {
 
 	int32_t ret;
@@ -874,7 +874,7 @@ static void mlx90632_driver_init(const struct device *dev)
     cal_data->Ka = (uint16_t)( read_buf[70] << 8) | (uint16_t)(read_buf[71]);
     cal_data->Ha = (uint16_t)( read_buf[72] << 8) | (uint16_t)(read_buf[73]);
     cal_data->Hb = (uint16_t)( read_buf[74] << 8) | (uint16_t)(read_buf[75]);
-
+    return ret;
 }
 
 
