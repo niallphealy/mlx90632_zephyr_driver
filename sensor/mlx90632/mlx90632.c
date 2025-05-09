@@ -764,7 +764,6 @@ int32_t mlx90632_get_channel_position(const struct device *dev)
 
 int32_t mlx90632_i2c_read(const struct device *dev, int16_t register_address, uint16_t *value)
 {
-    printk("READING FROM MLX TEMP\n");
     uint8_t buffer[2]; // Buffer to store 2 bytes read from the I2C device
     uint8_t i2c_write_buff[2];
     int32_t ret;
@@ -787,7 +786,7 @@ int32_t mlx90632_i2c_read(const struct device *dev, int16_t register_address, ui
 }
 int32_t mlx90632_i2c_read32(const struct device *dev, int16_t register_address, uint32_t *value)
 {
-    printk("READING FROM MLX TEMP\n");
+
     uint8_t buffer[4]; // Buffer to store 4 bytes read from the I2C device
     uint8_t i2c_write_buff[2];
     int32_t ret;
