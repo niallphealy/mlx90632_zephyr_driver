@@ -854,6 +854,8 @@ static int mlx90632_driver_init(const struct device *dev)
 		printk("I2C device not ready\n");
 		return -1;
 	}
+    ret = i2c_write_dt(&cfg->i2c, write_buff, 2);
+    k_sleep(K_MSEC(10));
         // convert to one larger read
     ret = i2c_write_read_dt(&cfg->i2c, write_buff, 2, &read_buf, 76);
     k_sleep(K_MSEC(10));
